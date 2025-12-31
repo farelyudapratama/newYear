@@ -1,5 +1,19 @@
+var now = new Date();
+var currentYear = now.getFullYear();
+var currentMonth = now.getMonth();
+var currentDate = now.getDate();
+
+var isCelebrationPeriod = (currentMonth === 0 && currentDate <= 7);
+
+var celebrateYear = currentYear;
+var nextYear = currentYear + 1;
+
+var countDownDate = new Date("Jan 1, " + nextYear + " 00:00:00").getTime();
+
+var showCelebration = isCelebrationPeriod;
+
 var optionsWaiting = {
-    strings: ["Menunggu tahun 2024", "Sudahkah kalian membuat revolusi?"],
+    strings: ["Menunggu tahun " + nextYear, "Sudahkah kalian membuat revolusi?"],
     typeSpeed: 50,
     backSpeed: 25,
     showCursor: true,
@@ -8,7 +22,7 @@ var optionsWaiting = {
 };
 
 var optionsNewYear = {
-    strings: ["Selamat Tahun Baru!", "Semangat baru untuk revolusi tahun ini!"],
+    strings: ["Selamat Tahun Baru " + celebrateYear + "!", "Semangat baru untuk revolusi tahun ini!"],
     typeSpeed: 50,
     backSpeed: 25,
     showCursor: true,
@@ -16,40 +30,49 @@ var optionsNewYear = {
     loop: true,
 };
 
-var typewriter = new Typed("#typewriter", optionsWaiting);
+if (showCelebration) {
+    var typewriter = new Typed("#typewriter", optionsNewYear);
+    document.getElementById("countdown").innerHTML = "Happy New Year!";
+    document.title = "Selamat tahun baru " + celebrateYear;
+    displayFireworks();
+} else {
+    var typewriter = new Typed("#typewriter", optionsWaiting);
+    
+    var x = setInterval(function () {
+        var now = new Date().getTime();
+        var distance = countDownDate - now;
 
-// Set the date we're counting down to
-var countDownDate = new Date("Jan 1, 2024 00:00:00").getTime();
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-// Update the countdown every 1 second
-var x = setInterval(function () {
-    var now = new Date().getTime();
-    var distance = countDownDate - now;
+        days = (days < 10) ? '0' + days : days;
+        hours = (hours < 10) ? '0' + hours : hours;
+        minutes = (minutes < 10) ? '0' + minutes : minutes;
+        seconds = (seconds < 10) ? '0' + seconds : seconds;
 
-    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        document.getElementById("countdown").innerHTML = days + ":" + hours + ":" + minutes + ":" + seconds;
 
-    days = (days < 10) ? '0' + days : days;
-    hours = (hours < 10) ? '0' + hours : hours;
-    minutes = (minutes < 10) ? '0' + minutes : minutes;
-    seconds = (seconds < 10) ? '0' + seconds : seconds;
+        if (distance < 0) {
+            clearInterval(x);
+            
+            document.getElementById("countdown").innerHTML = "Happy New Year!";
+            document.title = "Selamat tahun baru " + nextYear;
+            typewriter.destroy();
 
-    document.getElementById("countdown").innerHTML = days + ":" + hours + ":" + minutes + ":" + seconds;
-
-    // If the countdown is over, display a message
-    if (distance < 0) {
-        clearInterval(x);
-        
-        document.getElementById("countdown").innerHTML = "Happy New Year!";
-        document.title = "Selamat tahun baru 2024"
-        typewriter.destroy();
-
-        typewriter = new Typed("#typewriter", optionsNewYear);
-        displayFireworks();
-    }
-}, 1000);
+            typewriter = new Typed("#typewriter", {
+                strings: ["Selamat Tahun Baru " + nextYear + "!", "Semangat baru untuk revolusi tahun ini!"],
+                typeSpeed: 50,
+                backSpeed: 25,
+                showCursor: true,
+                cursorChar: '_',
+                loop: true,
+            });
+            displayFireworks();
+        }
+    }, 1000);
+}
 
 function displayFireworks() {
     var audio = new Audio('sound.mp3');

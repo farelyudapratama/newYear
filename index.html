@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Tahun Baru</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.1.0/typed.umd.js" ></script>
+    <script>
+        var now = new Date();
+        var currentYear = now.getFullYear();
+        var currentMonth = now.getMonth();
+        var currentDate = now.getDate();
+        var nextYear = currentYear + 1;
+        
+        if (currentMonth === 0 && currentDate <= 7) {
+            document.title = "Selamat Tahun Baru " + currentYear;
+        } else {
+            document.title = "Menunggu " + nextYear;
+        }
+    </script>
+</head>
+
+<body>
+    <div class="content">
+        <div id="countdown"></div>
+
+        <span id="typewriter"></span>
+    </div>
+    <canvas id="Canvas"></canvas>
+    <script src="script.js"></script>
+</body>
+
+</html>
